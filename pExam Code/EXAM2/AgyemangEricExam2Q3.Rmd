@@ -1,0 +1,158 @@
+---
+title: "IT 497 Exam 2 Question 3"
+output:
+  word_document: default
+  html_notebook: default
+author: "Agyemang Eric"
+---
+
+```{r}
+# Question 3. 
+library(tidyverse)
+library(readr)
+
+# a. Read in the following Horror Movie data:
+horror_movies <-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")
+```
+
+```{r}
+# b. Examine the data (look at head and tail)
+# Head
+head(horror_movies)
+```
+
+```{r}
+# Tail
+tail(horror_movies)
+```
+
+```{r}
+# c. Examine the structure (str) of the data
+str(horror_movies)
+```
+
+```{r}
+# d. Use select to obtain the columns title, release_country, review_rating, and budget.
+
+horror_movies_1 <- select(horror_movies, title, release_country, review_rating, budget)
+horror_movies_1
+```
+
+```{r}
+# e. Omit all other columns
+horror_movies_2<- select(horror_movies, -c(genres, release_date, movie_rating, movie_run_time, plot, cast, language, filming_locations))
+horror_movies_2
+```
+
+```{r}
+# f. Obtain the movies released in the USA with a movie rating of either PG-13 or R (Omit movies with other ratings)
+library(dplyr)
+
+movie_rating_select <- c("PG-13", "R")
+horror_movies_3 <- filter(horror_movies,  release_country == "USA")%>%filter(movie_rating%in%movie_rating_select)
+horror_movies_3
+```
+```{r}
+# g. Omit any rows with missing data in the columns title, release_country, review_rating, or budget
+
+good <- complete.cases(horror_movies_3)
+
+horror_movies_4 <- horror_movies_3[good, ]
+horror_movies_4
+```
+
+
+```{r}
+# h. Omit any rows with budget in any currency other than US Dollars (this is probably the most difficult part of the question).
+
+horror_movies_5 <- subset(horror_movies_4, startsWith(as.character(budget), "$"))
+horror_movies_5
+```
+
+```{r}
+
+# i. Omit any rows with budgets less than $500,000
+horror_movies_5$budget<-parse_number(horror_movies_5$budget)
+horror_movies_5$budget <-as.numeric(horror_movies_5$budget)
+horror_movies_6 <- horror_movies_5[!(horror_movies_5$budget < 500000), ]
+horror_movies_6 
+
+```
+
+
+```{r}
+# j. Convert movie_run_time to numeric. You can do this any way you like, but may want to use parse_number from the readr package.
+horror_movies_6$movie_run_time<-parse_number(horror_movies_6$movie_run_time)
+horror_movies_6
+```
+
+
+```{r}
+# k1. Using a bargraph (or histogram), show the average review rating for both PG-13 and R movies
+
+# Using the bargraph we first find the average review ratings
+horror_movies_7 <- mutate(horror_movies_6, average_review_rating = (review_rating/156))
+```
+
+```{r}
+library(ggthemes)
+
+p<-ggplot(data = horror_movies_7, aes(x = movie_rating, y = average_review_rating, fill = movie_rating)) + geom_bar(stat="identity") + theme_economist() + ggtitle("Bargraph of average review rating for both PG-13 and R movies")+ theme(legend.position = "right")
+
+p
+
+```
+
+```{r}
+# K2. Write a two sentence explanation of the graph.
+# This is a bargraph showing the movie ratings (PG-13 movies on the left, and R movies on the right) on the x-axis ploted against the average review rating on the y-axis. 
+
+# From this graph, the R movies have the highest average review rating which is almsot twice that of PG-13 movies, while the PG-13 movies is the least average review rating. the legend of this graph is shown at the right.
+```
+
+
+```{r}
+# l1. Using a bargraph (or histogram), show the average budgets for both PG-13 and R movies
+
+# Using the bargraph we first find the average budgets
+horror_movies_8 <- mutate(horror_movies_7, average_budgets = (budget/156))
+```
+
+```{r}
+library(ggthemes)
+
+p2<-ggplot(data = horror_movies_8, aes(x = movie_rating, y = average_budgets, fill = movie_rating)) + geom_bar(stat="identity") + theme_economist() + ggtitle("bargraph of average budgets for both PG-13 and R movies") + theme(legend.position = "right")
+
+p2
+
+```
+
+
+```{r}
+# l2. Write a two sentence explanation of the graph.
+
+# This is a bargraph showing the average budget for both PG-13 movies displayed on the left and R movies on the right where both movie rating are plotted on the x-axis and avreage budgets on the y-axis.
+
+# Here, we see that the R movies have a slightly higher budget than that of the PG-13 movies. The legend of this graph is shown at the right position of the graph.
+```
+
+
+```{r}
+# m1. Find the scatter plot of the review ratings and movie run times.
+
+ggplot(horror_movies_8, aes(x = movie_run_time, y = review_rating)) + geom_point(color="blue") + geom_smooth(method = lm, formula = y ~ x, se = FALSE, color="orange", fill="blue") + ggtitle("Scatter plot of review ratings and movie run times")
+
+```
+
+
+```{r}
+# m2. Does the plot reveal any relationship between the variables? Write a two sentence explanation of the graph.
+
+# No.  This plot does not reveal a relationship between the variables.
+
+# From this graph, we can see that the  movie run times are plotted on the x-axis and are plotted against the review ratings on the y-axis, with the data points scatterd without a particular patten. 
+
+# We can also see that some data points fall close to the line of best fit while most of the points do not fall close to the line. This shows that there is a considereably high vriablility between the data points and the line. These show no patten of relationship existing between the two variables. 
+
+```
+

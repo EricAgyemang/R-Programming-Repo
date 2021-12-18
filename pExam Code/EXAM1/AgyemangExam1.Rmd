@@ -1,0 +1,271 @@
+---
+title: "IT 497 Exam1"
+output:html_notebook
+Author: "Agyemang Eric""
+---
+```{r}
+library(tidyverse)
+library(remotes)
+```
+
+```{r}
+remotes::install_github("jrosen48/tidykids")
+library(tidykids)
+library(remotes)
+library(dplyr)
+```
+
+
+```{r}
+tidykids
+```
+
+```{r}
+# QUESTION 1 Output 1
+# Find the 3 states that spend the most (raw) on PK12ed
+# Scraping the region 1 of which I am assigned to 
+
+Regions <- c("Alabama", "Florida", "Georgia", "Louisiana", "Mississippi", "Tennessee", "Arkansas", "Texas")
+
+State_PK12ed <-tidykids%>% 
+  filter(variable %in% c("PK12ed"), state %in% Regions)
+
+## Scraping from these regions data on the year 2016
+State_PK12ed_2016 <- filter(State_PK12ed, year == "2016")
+
+# rearanging the scraped data in decending order with respect to raw
+Desc_State_PK12ed <- arrange(State_PK12ed_2016, desc(raw))
+
+## The 3 most (raw) spending states on PK12ed
+most_spending = head(Desc_State_PK12ed, 3)
+most_spending
+```
+
+```{r}
+# Listing the 3 states from highest to lowest in PK12ed spending 
+most_spending$state
+
+```
+
+
+
+```{r}
+# QUESTION 1 Output 2
+# Find the 3 states that spend the least (raw) on PK12ed
+# rearanging the scraped data in ascending order with respect to raw
+Asc_State_PK12ed <- arrange(State_PK12ed_2016, -desc(raw))
+
+## The 3 least (raw) spending states on PK12ed
+least_spending = head(Asc_State_PK12ed, 3)
+least_spending
+```
+
+```{r}
+# Listing the 3 states from the lowest to the highest in PK12ed spending 
+least_spending$state
+```
+
+
+```{r}
+# QUESTION 1 Output 3
+# Find the 3 states that spend the most (adjusted per child) on SNAP
+Regions <- c("Alabama", "Florida", "Georgia", "Louisiana", "Mississippi", "Tennessee", "Arkansas", "Texas")
+
+State_SNAP <-tidykids%>% 
+  filter(variable %in% c("SNAP"), state %in% Regions)
+
+## Scraping from these regions data on the year 2016
+State_SNAP_2016 <- filter(State_SNAP, year == "2016")
+
+# rearanging the scraped data in decending order with respect to inf_adj_perchild
+Desc_State_SNAP <- arrange(State_SNAP_2016, desc(inf_adj_perchild))
+
+## The 3 most (adjusted per child) spending states on SNAP
+most_spending = head(Desc_State_SNAP, 3)
+most_spending
+```
+
+```{r}
+# Listing the 3 states from the highest to lowest in SNAP spending 
+most_spending$state
+```
+
+```{r}
+# Question 1 Output 4. 
+#Find the 3 states that spend the least (adjusted per child) on SNAP
+# rearanging the scraped data in ascending order with respect to inf_adj_perchild
+Asc_State_SNAP <- arrange(State_SNAP_2016, -desc(inf_adj_perchild))
+
+## The 3 least (adjusted per child) spending on SNAP
+least_spending = head(Asc_State_SNAP, 3)
+least_spending
+
+```
+
+```{r}
+# Listing the 3 states from the highest to lowest in SNAP spending 
+least_spending$state
+```
+
+
+
+```{r}
+# Question 1 Output 5.
+# Find the 3 states that have had the largest increase in (inflation adjusted) spending on Higher Ed spending from 1997 to 2016.
+# Scraping the region 1 of which I am assigned to 
+
+Regions <- c("Alabama", "Florida", "Georgia", "Louisiana", "Mississippi", "Tennessee", "Arkansas", "Texas")
+
+State_Higher_Ed <-tidykids%>%
+  filter(variable %in% c("highered"), state %in% Regions)%>%arrange(desc(inf_adj))
+
+# Dropping all repeatition states with inflation adjusted for different years to get the required 3 states
+State_largest_incr <- State_Higher_Ed[!duplicated(State_Higher_Ed$state),]%>%head(3)
+
+State_largest_incr$state
+```
+
+
+```{r}
+ library(tidyverse)
+# Question #2 
+# data covering all expeditions from 1905 through Spring 2019
+expeditions <-readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-22/expeditions.csv')
+
+```
+
+
+```{r}
+# QUESTION 2 Output #1 
+#Which year had the most member deaths (for your assigned peak only). Show expedition name and year and member deaths.
+
+# Scraping data on my assigned peak "Everest"
+peak_Everest <- filter(expeditions, peak_name == "Everest")
+
+# The year with most number of deaths 
+peak_Everest[which.max(peak_Everest$member_deaths), 'year']
+
+```
+
+```{r}
+# The year with most number of deaths; Show expedition name and year and member deaths 
+peak_Everest[which.max(peak_Everest$member_deaths), ]%>%select(peak_name, year, member_deaths)
+```
+
+```{r}
+# QUESTION 2 Output #2 
+# Which expedition had the most deaths; Include both member and hired staff deaths combined.Show expedition name and year and total deaths. 
+most_deaths <-filter(expeditions, peak_name == "Everest")%>%mutate(total_deaths = member_deaths+hired_staff_deaths)
+
+most_deaths[which.max(most_deaths$total_deaths), ]%>%select(peak_name, year, total_deaths)
+```
+
+```{r}
+# QUESTION 2 Output #3 
+# Which expedition had the highest percent of members die; Show expedition name and year and percent of member deaths
+filter(expeditions, peak_name == "Everest")%>%mutate(percent_memb_deaths = (member_deaths/members)*100)%>% arrange(desc(percent_memb_deaths))%>%filter(percent_memb_deaths == "100")%>%select(peak_name, year,        percent_memb_deaths)
+```
+
+
+```{r}
+# QUESTION 2 Output #4
+# Which expedition had the highest percent of staff die
+filter(expeditions, peak_name == "Everest")%>%mutate(percent_staff_deaths = (hired_staff_deaths/hired_staff)*100)%>% arrange(desc(percent_staff_deaths))%>%filter(percent_staff_deaths == "100")%>%select(peak_name, year, percent_staff_deaths)
+
+```
+
+
+```{r}
+# QUESTION 2 Output #5 
+# Which year had the most climbers successfully reach the top of your assigned peak?
+
+most_climbers <-filter(expeditions, peak_name == "Everest")%>%filter(termination_reason == 'Success (main peak)')
+
+# Dropping all repeated years with the most climbers sucessfully reach the top  to get the required years
+simplified_years <- most_climbers[!duplicated(most_climbers$year),]
+
+simplified_years$year 
+
+```
+
+
+
+```{r}
+# Question #3
+# Step 1.
+library(tidyverse)
+library(xml2)
+library(rvest)
+library(tibble)
+
+
+linux_url<-"https://distrowatch.com/"
+linux_webpage <- read_html(linux_url)
+
+new_linux_url <-"https://distrowatch.com/%s"
+linux_distros <- rvest::html_table(linux_webpage, fill = TRUE)[[36]]%>%
+  tibble::as_tibble(.name_repair = "unique") # repair the repeated columns
+
+names(linux_distros ) <- c("Rank", "Distribution", "HPD")
+linux_distros <- linux_distros[-c(1, 2), ]
+linux_distros$HPD <- as.numeric(gsub(",", "", linux_distros$HPD))
+linux_distros$Rank <- as.numeric(linux_distros$Rank)
+
+```
+
+
+
+
+```{r}
+# Question 3 Output #1. 
+# Show the Rank, Distribution, HPD of all Linux distros with a HPD > 1000.
+filter(linux_distros, HPD > 1000)
+
+
+```
+
+```{r}
+# Question 3 Output #2. 
+# Show the Rank, Distribution, HPD of all UBUNTU distros.
+Ubuntu <-c("Ubuntu", "Kubuntu", "Xubuntu", "Lubuntu", "Ubuntu Kylin", "Ubuntu MATE", "Ubuntu Budgie", "Ubuntu Studio", "Emmabuntüs", "Ubuntu DP", "elementary")
+
+UBUNTU_distros <-linux_distros%>%
+  filter(Distribution %in% Ubuntu)
+
+UBUNTU_distros
+```
+
+```{r}
+# QUESTION 4
+# Redo question #3 NOT using rvest.
+# importing data obtained using Google sheets
+library(readxl)
+Linux_distros4 <- read_excel("C:/Users/AGYEMANG ERIC/Desktop/Untitled spreadsheet.xlsx")
+names(Linux_distros4) <- c("Rank", "Distribution", "HPD")
+Linux_distros4 <- Linux_distros4[-c(1, 2), ]
+Linux_distros4$HPD <- as.numeric(gsub(",", "", Linux_distros4$HPD))
+Linux_distros4$Rank <- as.numeric(Linux_distros4$Rank)
+```
+```{r}
+# Question 4 Output #1. 
+# Show the Rank, Distribution, HPD of all Linux distros with a HPD > 1000.
+filter(Linux_distros4, HPD > 1000)
+
+```
+
+
+```{r}
+# Question 4 Output #2. 
+# Show the Rank, Distribution, HPD of all UBUNTU distros.
+Ubuntu <-c("Ubuntu", "Kubuntu", "Xubuntu", "Lubuntu", "Ubuntu Kylin", "Ubuntu MATE", "Ubuntu Budgie", "Ubuntu Studio", "Emmabuntüs", "Ubuntu DP", "elementary")
+
+UBUNTU_distros4 <-Linux_distros4%>%
+  filter(Distribution %in% Ubuntu)
+
+UBUNTU_distros4
+```
+
+
+
+
+

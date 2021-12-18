@@ -1,0 +1,72 @@
+---
+title: "IT 497 Lab 7"
+output:
+  word_document: default
+  html_notebook: default
+Author: Agyemang Eric
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+set.seed(955)
+# Make some noisily increasing data
+dat <- data.frame(cond = rep(c("A", "B"), each=10),
+xvar = 1:20 + rnorm(20,sd=3),
+yvar = 1:20 + rnorm(20,sd=3))
+head(dat)
+```
+
+```{r}
+# Question 1
+ggplot(dat, aes(x=xvar, y=yvar)) +
+geom_point(shape=8, size=2) + # use shape 8
+geom_smooth(method=lm, color="red", # Add red linear regression line
+se=FALSE) # Don't add shaded confidence region
+
+```
+
+```{r}
+# Question 2
+ggplot(dat, aes(x=xvar, y=yvar, color=cond)) + geom_point(size=2) +
+geom_smooth(method=lm)
+
+```
+
+```{r}
+# Question 3
+df <- data.frame(dose=c("D0.5", "D1", "D2"),
+len=c(4.2, 10, 29.5))
+head(df)
+```
+
+```{r}
+library(ggthemes)
+
+p<-ggplot(data=df, aes(x=dose, y=len)) +
+geom_bar(stat="identity")+ coord_flip()+ theme_economist() +
+  ggtitle("Vitamin C's impact on tooth growth in Guinea pigs")
+p
+```
+
+```{r}
+# Question 4
+#Data for question 4.
+set.seed(1234)
+dat <- data.frame(cond = factor(rep(c("A","B"), each=200)),
+rating = c(rnorm(200),rnorm(200, mean=.8)))
+# View first few rows
+head(dat)
+```
+
+```{r}
+ggplot(dat, aes(x=cond, y=rating, fill= cond)) + geom_boxplot() + theme_stata() + theme(legend.position ="bottom") + scale_fill_manual(breaks = c("A", "B"), values = c('darkblue', 'darkred'))
+```
+
+```{r}
+
+```
+

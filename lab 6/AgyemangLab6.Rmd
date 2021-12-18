@@ -1,0 +1,39 @@
+---
+title: "IT 497 LAB 6"
+output:
+  word_document: default
+  html_notebook: default
+Author: Agyemang Eric
+---
+```{r}
+library(ggplot2)
+dat<-ggplot2::mpg
+```
+
+```{r}
+# Tranforming the variables in factor with the transform() function
+dat <- transform(dat, cyl = factor(cyl), drv = factor(drv), fl = factor(fl), year = factor(year), class = factor(class))
+```
+
+```{r}
+# Question 1
+ggplot(dat) + aes(x = displ, y = hwy) + geom_point()
+```
+
+```{r}
+# Question 2
+ggplot(dat) + aes(x = hwy, color = drv, fill = drv) + geom_density(alpha = 0.25) # add transparency
+```
+
+```{r}
+# Question 3
+ggplot(dat) + aes(x = drv, y = hwy) + geom_boxplot(varwidth = TRUE) + geom_jitter(alpha = 0.25, width = 0.2) 
+
+```
+
+```{r}
+# Question 4
+p <-ggplot(dat) + aes(x = displ, y = hwy) + geom_point() 
+
+p + geom_text(aes(label=rownames(dat)), check_overlap = TRUE, size = 2, vjust = -1)
+```

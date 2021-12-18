@@ -1,0 +1,230 @@
+---
+title: "IT 497 Lab9"
+output:
+  word_document: default
+  html_notebook: default
+---
+```{r}
+# Step 4: Replicate your Dynamic Query Tool from above query using R
+
+```
+
+```{r}
+# b. Load the needed packages
+library(httr)
+library(jsonlite)
+
+```
+
+
+```{r}
+# 1. affiliation= Illinois State University
+# author=Tang
+# c. Use the results query to recreate your request
+
+url1 <- "http://ieeexploreapi.ieee.org/api/v1/search/articles?"
+key1 <- "apikey=ycjb34xarj885mhkfx2qg38r"
+format1 <- "&format=json&max_records=25&start_record=1&sort_order=asc&sort_field=article_number"
+search.terms1 <- "&affiliation=Illinois+State+University&author=Tang"
+```
+
+```{r}
+# we will use the paste0 package to pull everything into a single string
+z1 <- paste0(url1,key1,format1,search.terms1)
+```
+
+```{r}
+# we will now use the httr package GET function to connect to the IEEE API
+# GET is upper case - R is case sensitive
+y1 <- GET(z1)
+get_text1 <- content(y1, "text")
+```
+
+```{r}
+# check the output to see that we obtained data
+get_text1
+```
+
+```{r}
+# convert the JSON data to a data frame
+get_text_json1 <- fromJSON(get_text1, flatten = TRUE)
+get_text_df1 <- as.data.frame(get_text_json1)
+```
+
+```{r}
+# convert the JSON data to a data frame
+get_text_json1 <- fromJSON(get_text1, flatten = TRUE)
+get_text_df1 <- as.data.frame(get_text_json1)
+```
+
+
+```{r}
+head(get_text_df1$articles.title)
+```
+
+
+
+
+```{r}
+# 2. Publication_title= IEEE Transactions on Visualization and Computer Graphics
+#    Publication_year=2018
+
+# c. Use the results query to recreate your request
+url2 <- "http://ieeexploreapi.ieee.org/api/v1/search/articles?"
+key2 <- "apikey=ycjb34xarj885mhkfx2qg38r"
+format2 <- "&format=json&max_records=25&start_record=1&sort_order=asc&sort_field=article_number"
+search.terms2 <- "&publication_title=IEEE+Transactions+on+Visualization+and+Computer+Graphics&publication_year=2018"
+```
+
+```{r}
+# we will use the paste0 package to pull everything into a single string
+z2 <- paste0(url2,key2,format2,search.terms2)
+```
+
+```{r}
+# we will now use the httr package GET function to connect to the IEEE API
+# GET is upper case - R is case sensitive
+y2 <- GET(z2)
+get_text2 <- content(y2, "text")
+```
+
+
+
+```{r}
+# convert the JSON data to a data frame
+get_text_json2 <- fromJSON(get_text2, flatten = TRUE)
+get_text_df2 <- as.data.frame(get_text_json2)
+```
+
+
+
+
+```{r}
+head(get_text_df2$articles.title)
+```
+
+
+
+```{r}
+# 3. index_terms=python
+# publication_year=2019
+
+# c. Use the results query to recreate your request
+url3 <- "http://ieeexploreapi.ieee.org/api/v1/search/articles?"
+key3 <- "apikey=ycjb34xarj885mhkfx2qg38r"
+format3 <- "&format=json&max_records=25&start_record=1&sort_order=asc&sort_field=article_number"
+search.terms3 <- "&index_terms=python&publication_year=2019"
+```
+
+```{r}
+# we will use the paste0 package to pull everything into a single string
+z3 <- paste0(url3,key3,format3,search.terms3)
+```
+
+```{r}
+# we will now use the httr package GET function to connect to the IEEE API
+# GET is upper case - R is case sensitive
+y3 <- GET(z3)
+get_text3 <- content(y3, "text")
+```
+
+
+
+```{r}
+# convert the JSON data to a data frame
+get_text_json3 <- fromJSON(get_text3, flatten = TRUE)
+get_text_df3 <- as.data.frame(get_text_json3)
+```
+
+
+
+
+```{r}
+head(get_text_df3$articles.title)
+```
+
+
+
+```{r}
+# 4.index_terms=javascript
+# publication_year=2019
+
+# c. Use the results query to recreate your request
+url4 <- "http://ieeexploreapi.ieee.org/api/v1/search/articles?"
+key4 <- "apikey=ycjb34xarj885mhkfx2qg38r"
+format4 <- "&format=json&max_records=25&start_record=1&sort_order=asc&sort_field=article_number"
+search.terms4 <- "&index_terms=javascript&publication_year=2019"
+```
+
+```{r}
+# we will use the paste0 package to pull everything into a single string
+z4 <- paste0(url4,key4,format4,search.terms4)
+```
+
+```{r}
+# we will now use the httr package GET function to connect to the IEEE API
+# GET is upper case - R is case sensitive
+y4 <- GET(z4)
+get_text4 <- content(y4, "text")
+```
+
+
+
+```{r}
+# convert the JSON data to a data frame
+get_text_json4 <- fromJSON(get_text4, flatten = TRUE)
+get_text_df4 <- as.data.frame(get_text_json4)
+```
+
+
+
+
+```{r}
+head(get_text_df4$articles.title)
+```
+
+
+
+
+
+```{r}
+# Step 5: Use the data from above and ggplot2 and create a barchart to show which topic (javascript or python) was more popular in 2019
+library(tidyverse)
+
+```
+
+```{r}
+# Identifying which row which row go with each dataframe
+get_text_df3['df']<-'python'
+get_text_df4['df']<-'javascript'
+```
+
+```{r}
+# combining the new dataframes
+New_data<-rbind(get_text_df3, get_text_df4)
+```
+
+
+```{r}
+# Plotting the counts of bith topics
+plot<-ggplot(data = New_data, aes(x=df))+geom_bar()
+
+plot
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

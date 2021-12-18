@@ -1,0 +1,178 @@
+---
+title: "IT 497 Lab 3"
+Author: "Eric Agyemang"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(dplyr)
+library("rvest")
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+## 
+## Attaching package: 'dplyr'
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+
+# QUESTION 1
+# Below is a link to a file listing the number women software engineers at several Silicon Valley tech firms
+
+wom_soft_eng <- read.csv("http://www.itk.ilstu.edu/faculty/jrwolf/wit.csv", header = TRUE)
+
+```
+
+```{r}
+# 1 a) R code to find the number women software engineers at Reddit
+women <- filter(wom_soft_eng, company == "Reddit")
+
+women$num_female_eng
+```
+
+```{r}
+# 1 b) create the R code to find the total number women software engineers in the dataset
+sum(select(wom_soft_eng, num_female_eng))
+```
+
+
+```{r}
+# QUESTION 2
+# The R code below, it will create a dataframe (named pop) with 139 observations and 4 variables.
+
+### Start pop Code#######
+## Loading required package: xml2
+## The following object is masked from 'package:readr':
+##     guess_encoding
+html <- read_html("https://www.ssa.gov/oact/babynames/numberUSbirths.html") 
+usBirthData <- html_table(html, fill=TRUE)
+pop <- usBirthData[[1]]
+pop$Male <- as.numeric(gsub(",", "", pop$Male))
+pop$Female <- as.numeric(gsub(",", "", pop$Female))
+pop$Total <- as.numeric(gsub(",", "", pop$Total))
+names(pop) <- c("year", "male", "female", "total")
+### End pop Code #######
+
+```
+
+
+```{r}
+# 2 a) Create the R code to find the year with the most children born.
+pop[which.max(pop$total), 'year']
+```
+
+
+
+```{r}
+# 2 b Using the same list, create the R code to find the year with the fewest children born.
+
+pop[which.min(pop$total), 'year']
+```
+
+
+```{r}
+#QUESTION 3 The following code will download the data from the wiki page above and create a dataframe named top Cities
+
+#### Start Top Cities Code ####
+library(tidyverse)
+library(rvest)
+
+topCities <- read_html("https://en.wikipedia.org/wiki/List_of_cities_proper_by_population")
+topCities <- html_table(
+html_node(topCities, "table.sortable"), header=TRUE, trim=F, fill = TRUE)[-1,]
+names(topCities) <- c("City", "Country", "Image", "Population", "City.Def", "City.Population", "City.Area", "Metro.Pop",
+"Metro.Area", "Urban.Pop", "Urban.Area")
+
+topCities$Image <- NULL
+
+## Old String Substitute (gsub)
+topCities$Population <- as.numeric(gsub(",", "", topCities$Population))
+
+## tidyverse String Substitute (str_replace_all)
+topCities$City<-str_replace_all(topCities$City, "\n", "")
+topCities$Country<-str_replace_all(topCities$Country, "\n", "")
+topCities$City.Def<-str_replace_all(topCities$City.Def, "\n", "")
+topCities$City.Area<-str_replace_all(topCities$City.Area, "\n", "")
+topCities$Metro.Pop<-str_replace_all(topCities$Metro.Pop, "\n", "")
+topCities$Metro.Area<-str_replace_all(topCities$Metro.Area, "\n", "")
+topCities$Urban.Pop<-str_replace_all(topCities$Urban.Pop, "\n", "")
+topCities$Urban.Area<-str_replace_all(topCities$Urban.Area, "\n", "")
+#### End Top Cities Code ####
+head(topCities)
+
+#3 a) Use the topCities dataframe and create the R code to find the 5 largest cities in India.
+topCities$Country<-str_trim(topCities$Country) 
+
+indian_cities <- filter(topCities, Country == "India")
+
+## Rearranging rows 
+indian_cities = arrange(indian_cities, desc(Population))
+
+head(indian_cities, 5)
+
+#3 b. Use the topCities dataframe and create the R code to find the 5 largest cities in China.
+china_cities <- filter(topCities, Country == "China")
+
+## Rearranging rows 
+china_cities = arrange(china_cities, desc(Population))
+
+head(china_cities, 5)
+```
+
+
+```{r}
+## QUESTION 4
+## code to download the S&P 500 companies and the dates they were added.
+########## SnP Code Start ##############
+
+url <- "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+url %>%
+read_html() %>%
+html_nodes("#constituents") %>%
+html_table(header = T) -> sp500
+sp500 <- sp500[[1]]
+names(sp500) <- c("Ticker", "Name", "SEC.Filing", "GICS.Sector", "GICS.SubIndustry", "Location.HQ", "Date.Added", "CIK", "Founded")
+sp500$Date.Added <- as.numeric(substr(sp500$Date.Added,1,4))
+########## SnP Code End ##############
+# 4 a) Create the R code to find the names of firms added to the S&P 500 since 2010.
+
+# We first filter all rows of firms added since 2010
+Comp_added <- filter(arrange(sp500, desc(Date.Added)), Date.Added >= 2010)
+Comp_added
+
+```
+
+```{r}
+# We display the names of firms added since 2010
+Comp_added$Name
+
+```
+
+```{r}
+# QUESTION 5
+# The code below will download the data from Wikipedia and create a dataframe named venue.
+### Start Venue R Code ####
+
+cricket_world_cup <- read_html("http://en.wikipedia.org/wiki/2015_Cricket_World_Cup")
+venues = html_table(html_nodes(cricket_world_cup, "table")[[5]])
+
+### End Venue R Code ####
+# 5a) Use the venue dataframe to find the name of the venue with the largest capacity.
+
+## We transform the data capacity column to numeric.
+venues$Capacity <-gsub(",","", venues$Capacity)
+venues$Capacity <-as.numeric(venues$Capacity)
+venues[which.max(venues$Capacity), 'Venue']
+
+#5b) Use the venue dataframe to find the name of the venue with the smallest capacity
+venues[which.min(venues$Capacity), 'Venue']
+
+
+```
+

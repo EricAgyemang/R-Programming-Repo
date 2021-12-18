@@ -1,0 +1,273 @@
+---
+title: "IT 497  Lab #1"
+Author: "Eric Agyemang"
+output: html_notebook
+---
+```{r}
+ # R is a statistical programming language 
+ # and much more!!! 
+  
+ # We will start with the basics 
+ 
+# You can use R like a calculator 
+x <- 1 
+y <- 2 
+z <- x + y 
+z
+
+```
+
+```{r}
+
+str(z)  
+```
+
+```{r}
+# First, let's read in heart attack payment data. 
+  
+ # This data comes from The United States Department of Health and Human 
+ # Services (HHS) 
+ # http://www.healthdata.gov/dataset/heart-attack-payment-national 
+  
+ # I have downloaded a copy of the data to ISU's sever to make it simple >  
+ df <- read.table("http://www.itk.ilstu.edu/faculty/jrwolf/hacosts.csv", header = TRUE, sep = ",") 
+ 
+ # In the above df is the name of our data frame. A data frame is used for storing > # data tables. 
+  
+ # It is a list of vectors of equal length. 
+  
+ # We can display the contents of our data frame by typing its name and selection 
+ # run. 
+ df 
+
+```
+
+```{r}
+names(df) 
+```
+
+
+```{r}
+
+head(df, 10) 
+```
+
+
+```{r}
+
+tail(df)
+```
+
+
+```{r}
+tail(df, 8) 
+
+```
+
+
+```{r}
+head(df, 23)
+```
+
+
+```{r}
+nrow(df) 
+```
+
+
+```{r}
+ncol(df) 
+```
+
+```{r}
+str(df) 
+```
+
+```{r}
+df$State # When accessing columns by name, we use the data frame name followed by the $ symbol and the column name 
+```
+
+```{r}
+df$Cost 
+```
+
+```{r}
+mean(df$Cost) # We can perform operations on specific columns 
+```
+
+```{r}
+min(df$Cost) 
+```
+
+```{r}
+max(df$Cost) 
+```
+
+```{r}
+sd(df$Cost) 
+```
+
+```{r}
+# Each horizontal line below the header is called a data 
+# row. Each data element of a row is called a cell. 
+# We can also access columns, rows and even cells by location 
+
+df$Cost[2] # This returns the cost cell in the second row 
+
+```
+
+```{r}
+df$Cost[2:5] # This returns the cost cells in rows 2 through 5 
+```
+
+```{r}
+df[5,] # This returns all of the rows in column 5 
+```
+
+```{r}
+df[1:5,] # This returns all of the rows in columns 1 through 5 
+```
+
+```{r}
+df[5,1] # This returns the data in columns 5 row 1 
+```
+
+```{r}
+df[5,2] # This returns the data in columns 5 row 2 
+```
+
+```{r}
+# We can find the minimum and maximum values in each column
+```
+
+```{r}
+which.min(df$Cost) # this returns the row of the minimum value 
+```
+
+```{r}
+which.max(df$Cost) # this returns the row of the maximum value 
+```
+
+```{r}
+df[which.min(df$Cost), ] # this returns the minimum value    
+```
+
+
+```{r}
+df[which.max(df$Cost), ] # this returns the maximum value    
+```
+
+```{r}
+# We can sort the data in our data frame by column 
+df <- df[order(df$Cost), ] # the default is ascending 
+head(df) 
+
+```
+
+```{r}
+high <- df[1:5,] # This assigns the data from the first 5 rows to a data frame named high 
+
+```
+
+```{r}
+df <- df[order(-df$Cost), ] # to sort in descending order 
+head(df) 
+
+```
+
+```{r}
+low <- df[1:5,] # This assigns the data from the first 5 rows 
+                # to a data frame named low 
+
+```
+
+```{r}
+# Let's move a bit faster 
+ 
+# read in fitbit data 
+df <-read.csv("http://www.itk.ilstu.edu/faculty/jrwolf/fitbitstats.csv", stringsAsFactors=F) 
+
+# Convert the Steps to numeric 
+df$Steps <- as.numeric(df$Steps) 
+# Look at the structure of your data frame 
+str(df) 
+
+```
+
+```{r}
+# Check minimums and maximums 
+  
+which.min(df$Steps)
+which.max(df$Steps) 
+
+```
+
+```{r}
+df[which.min(df$Steps), ]      
+```
+
+```{r}
+df[which.max(df$Steps), ]    
+```
+
+```{r}
+# Now using the fitbit data answer the following 
+ 
+# 1. Look at the first 6 rows of data 
+head(df, 6)
+```
+
+```{r}
+# 2. Look at the last 6 rows of data 
+tail(df, 6) 
+
+```
+
+```{r}
+# 3. Find the maximum and minimum number of steps taken by FitBit users in our data, 
+# maximum number of steps taken by FitBit users in our data 
+df1<-df[which.max(df$Steps), ] # This returns the row of the maximum number of steps reguired 
+df1 
+
+```
+
+```{r}
+df1$Steps # This returns the maximum number of steps required as chosen from the returned row of the maximum number of steps above. [1] 49771 
+#As the required maximum number of steps 
+
+```
+
+```{r}
+## Or 
+df[12, 2] 
+
+#As the required maximum number of steps 
+```
+
+```{r}
+# minimum number of steps taken by FitBit users in our data 
+df2<-df[which.min(df$Steps), ] # This returns the row of the minimum number of steps reguired 
+df2 
+
+```
+
+```{r}
+df2$Steps # This returns the minimum number of steps required as chosen from the returned row of the minimum number of steps above. [1] 6 
+#As the required minimum number of steps 
+## Or 
+df[844, 2] 
+
+```
+
+```{r}
+#As the required minimum number of steps 
+
+# 4. Find the total number or rows in the data 
+nrow(df) 
+
+```
+
+```{r}
+
+```
+

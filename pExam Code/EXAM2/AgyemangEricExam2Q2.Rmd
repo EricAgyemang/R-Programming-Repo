@@ -1,0 +1,118 @@
+---
+title: "IT 497 Exam 2 Question 2"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+```{r}
+# Question 2. 
+library(tidyverse)
+library(readr)
+
+# a. Read in the following Milk Cow data:
+df <- read_csv("https://github.com/rfordatascience/tidytuesday/raw/master/data/2019/2019-01-29/milkcow_facts.csv")
+```
+
+```{r}
+# b. Examine the data (look at head and tail)
+# Head
+head(df)
+```
+
+```{r}
+# Tail
+tail(df)
+```
+
+```{r}
+# c. Examine the structure (str) of the data
+str(df)
+```
+
+```{r}
+# d. Use select to obtain the columns: year, avg_milk_cow_number, milk_per_cow, avg_price_milk, milk_cow_cost_per_animal, alfalfa_hay_price and slaughter_cow_price.
+
+df1 <- select(df, year, avg_milk_cow_number, milk_per_cow, avg_price_milk, milk_cow_cost_per_animal, alfalfa_hay_price, slaughter_cow_price)
+df1
+```
+
+```{r}
+# e. Omit all other columns
+df <- select(df, -c(milk_production_lbs, dairy_ration, milk_feed_price_ratio, milk_volume_to_buy_cow_in_lbs))
+df
+```
+
+```{r}
+# f1. Using a line graph, show milk_per_cow and year.
+library(ggplot2)
+
+line_plot = ggplot(data = df, aes(x = year, y = milk_per_cow)) + geom_line(color= "red", size=1) + geom_point() + ggtitle("line graph showing milk_per_cow and year")
+
+line_plot
+
+```
+
+
+```{r}
+# f2. Write a two sentence explanation of the graph.
+
+# This is a line graph showing the year of milk production and the amount of milk per cow for the given years, where the years are on the abcissor and the milk per cow on the y-axis.
+
+# In this graph, we can see that as the years increase from 1980 to 2010, the amount of milk produced per cow seem to increase with small amount of decrement in some years. Example, there was a smalle decrease from 1983 to 1984, 1988 to 1989, 1995 to 1996, etc. This graph shows a positive relationship betweeen year and milk per cow.
+```
+
+
+```{r}
+# g1. Using a line graph, show avg_milk_cow_number and year.
+line_plot2 = ggplot(data = df, aes(x = year, y = avg_milk_cow_number)) + geom_line(color= "orange", size=1) + geom_point() + ggtitle("line graph showing avg_milk_cow_number and year")
+
+line_plot2
+```
+
+```{r}
+# g2. Write a two sentence explanation of the graph above.
+
+# This graph shows the years from 1980 to 2010 of cow milk production and the average milk cow number, where the years are on the abscessor and avgerage milk cow number on the y-axis. 
+
+# From this graph, the average milk cow number increases initially from 1980 with about 10800000 average milk cow numbers, reaching the maximum at 1983 with about 11050000 and then begun to fall to 1984 with about 10800000 and rise again from 1984 to 1985 with nearly 11000000 average milk cow number. From 1985, it fell reaching the minimum at 2004 with 9000000 and then rises again to 2008 with about 9300000. It then fell from 2008 to 2010 and then began to rise again. We may say there is an irregular flow between the two variables.
+
+```
+
+
+```{r}
+# h1. Find the scatter plot of avg_milk_cow_number and avg_price_milk.
+ggplot(df, aes(x = avg_milk_cow_number, y = avg_price_milk)) + geom_point(color="blue") + geom_smooth(method = lm, formula = y ~ x, se = FALSE, color="darkred", fill="blue") + ggtitle("scatter plot of avg_milk_cow_number and avg_price_milk")
+```
+
+```{r}
+# h2. Does the plot reveal any relationship between the variables? Write a two sentence explanation of the graph.
+
+# No.  This graph does not reveal a relationship between the variables.
+
+# From this graph, we can see that the average milk cow number on the x-axis is plotted against the average price milk with the data points scatterd without a particular patten. 
+
+# We can also see that most data points do not fall close to the line of best fit showing a considereably high vriablility between the data points and the line. These show no patten of relationship existing between the two variables. 
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

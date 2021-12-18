@@ -1,0 +1,194 @@
+---
+title: "R Notebook"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+```{r}
+# Question 1a. 
+# Reading in the  eBay data
+
+library(tidyverse)
+exfile <- "http://www.itk.ilstu.edu/faculty/jrwolf/ebay.csv"
+df <- read_csv(exfile)
+head(df)
+```
+
+```{r}
+#Question 1b.
+#Examine the data
+
+#look at the head of the data 
+head(df)
+
+```
+
+```{r}
+# Look at the tail of the data
+tail(df)
+
+```
+
+```{r}
+# Question 1c
+
+# Examine the structure (str) of the data
+str(df)
+
+```
+
+```{r}
+# Question d1.
+
+# Find the Mean (mean) and Standard Deviation (sd) by old/new of Price
+# Filter old condition out of the data
+old_data <- filter(df, Cond == "Used")
+old_data$Price <- as.numeric(old_data$Price)
+
+
+# Filter new condition out of the data
+New_data <- filter(df, Cond == "New")
+New_data$Price <- as.numeric(New_data$Price)
+
+```
+
+```{r}
+# Find the Mean (mean) and Standard Deviation (sd) by old of price
+
+# Find the Mean (mean) by old of price
+mean(old_data$Price)
+```
+
+
+```{r}
+# Find the Standard Deviation (sd) by old of price
+sd(old_data$Price)
+
+```
+
+
+```{r}
+# Find the Mean (mean) and Standard Deviation (sd) by new of Price
+
+# Find the Mean (mean) by New = 0 of price
+mean(New_data$Price)
+
+```
+
+```{r}
+# Find the Standard Deviation (sd) by New = 0 of price
+sd(New_data$Price)
+
+```
+
+```{r}
+# Question 1 d2.
+# Find the Mean (mean) and Standard Deviation (sd) by male/female of Price
+
+# Filter the male data out of the data
+male_data <- filter(df, Gender=="M")
+male_data$Price <- as.numeric(male_data$Price)
+
+# Filter the female data out of the data
+female_data <- filter(df, Gender=="F")
+female_data$Price <- as.numeric(female_data$Price)
+
+```
+
+```{r}
+# Find the Mean (mean) by male of Price
+
+mean(male_data$Price)
+
+```
+
+```{r}
+# Find theStandard Deviation (sd) by male of Price
+sd(male_data$Price)
+
+```
+
+```{r}
+# Find the Mean (mean) by female of Price
+mean(female_data$Price)
+
+```
+
+```{r}
+# Find the Standard Deviation (sd) by female of Price
+sd(female_data$Price)
+
+```
+
+```{r}
+# e1. Create a botplot of Price (by old/new )
+library(ggplot2)
+library(dplyr)
+
+# botplot of Price by old
+ggplot(old_data, aes(x=Cond, y= Price, fill = Cond)) + geom_boxplot() + theme(legend.position = "bottom") + scale_fill_manual(breaks = "Used", values =  'darkred') + ggtitle("Boxplot of price by old")
+
+```
+
+```{r}
+# botplot of Price by New
+ggplot(New_data, aes(x=Cond, y= Price, fill= Cond)) + geom_boxplot() + theme(legend.position = "bottom") + scale_fill_manual(breaks = "New", values =  'darkblue')   + ggtitle("Boxplot of price by New")
+
+```
+
+```{r}
+# We can show the relationship between price and old/new as
+ggplot(df, aes(x=Cond, y= Price, fill= Cond)) + geom_boxplot() + theme(legend.position ="bottom") +   scale_fill_manual(breaks = c("Used", "New"), values = c('darkred', 'darkblue')) + ggtitle("Boxplot of price by old and New")
+
+```
+
+```{r}
+# e2. Create a botplot of Price (by male/female )
+
+# botplot of Price by male
+ggplot(male_data, aes(x = Gender, y = Price, fill = Gender)) + geom_boxplot() + theme(legend.position = "bottom") + scale_fill_manual(breaks = "M", values =  'darkred') + ggtitle("Boxplot of price by Male")
+
+```
+
+```{r}
+# botplot of Price by female
+ggplot(female_data, aes(x = Gender, y = Price, fill = Gender)) + geom_boxplot() + theme(legend.position = "bottom") + scale_fill_manual(breaks = "F", values =  'green') + ggtitle("Boxplot of price by Female")
+
+```
+
+
+```{r}
+# We can show the relationship between price and male/female as
+ggplot(df, aes(x=Gender, y= Price, fill= Gender)) + geom_boxplot() + theme(legend.position ="bottom") +   scale_fill_manual(breaks = c("M", "F"), values = c('darkred', 'green')) + ggtitle("Boxplot of price by male and female")
+
+```
+
+```{r}
+# f. Create a histogram of Price (by color)
+library(ggthemes)
+## Warning: package 'ggthemes' was built under R version 4.0.3
+ggplot(df, aes(x = Price, color=Color, fill= Color)) +
+geom_histogram(position = "identity", alpha= 0.5, bins= 30, col= "black") + scale_fill_manual(values = c("Blue", "Gray", "Green", "Orange", "Pink", "Purple", "Red", "#c0c0c0", "White"))+ scale_color_manual(values = c("blue", "gray", "green", "orange", "pink", "purple", "red", "#c0c0c0", "white")) + theme_economist() + ggtitle("Histogram of Price by color")
+
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

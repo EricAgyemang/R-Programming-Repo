@@ -1,0 +1,131 @@
+---
+title: 'IT 497 FINAL ASSIGNMENT '
+author: "Eric Agyemang"
+---
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+```
+
+```{r}
+# 1. obtain a dataset related to the research proposal: 
+## Dataset is obtained from the World Development Indecators databese 
+```
+
+```{r}
+# 2. Complete the Exploratory Data Analysis Checklist
+#.1. Formulate your question 
+# .	What key factors are statistically significant that affects the life insurance demand in Africa? 
+
+# .	Does evidence-based approach support this ? 
+
+# .	What are the implications for policymakers and the private sector wishing to scale up life insurance in Africa?
+
+```
+
+```{r}
+# .2. Read in your data 
+library(readxl)
+Life_Ins <- read_excel("C:/Users/eagye/Desktop/Life_Ins.xlsx")
+
+```
+
+```{r}
+# .3. Check the packaging 
+
+# Checking number of roles
+nrow(Life_Ins)
+```
+
+```{r}
+# Checking number of columns
+ncol(Life_Ins)
+```
+
+```{r}
+# .4. Run str() 
+str(Life_Ins)
+```
+
+```{r}
+# .5. Look at the top and the bottom of your data 
+
+# Top of the data
+head(Life_Ins)
+```
+
+```{r}
+tail(Life_Ins)
+```
+
+```{r}
+# .6. Check your "n"s 
+# Looking at the the Life insurance density variable to see if all go well with that dependent variable
+table(Life_Ins$INSDENS)
+```
+
+```{r}
+# # Looking at the the Economic Growth variable to see if all go well with that independent variable
+#table(Life_Ins$EGROWTH)
+```
+
+```{r}
+#.7. Validate with at least one external data source (for this you would normally look at existing data -- but for this assignment, just list 5 or more journals or conference proceedings that have research similar to your research proposal)) 
+
+# Validation could be made with the following journals publications
+
+# Journal of Service Science Research
+# The World Bank Economic Review
+# Journal of Policy Modeling
+# The Geneva papers on risk and insurance-issues and practice
+# Journal of Global Strategic Management
+# Household Survey Report on the Anidaso Policy of the Gemini Life Insurance Company
+
+```
+
+```{r}
+## .8. Try the easy solution first (create a simple graph that describes part of the data. This can be a scatter plot, box plot or histogram or anything else that you feel would be useful).
+
+# Plot a scatter plot of life insurance density against years
+
+
+ggplot(Life_Ins, aes(x=Year, y= INSDENS)) + geom_point(color="blue")+ geom_smooth(method=lm, formula = y~x, se= FALSE, color="darkred", fill="blue")+ ggtitle("Scatter plot of Life Insurance Density and years")
+
+```
+
+```{r}
+# .9 Challenge your solution (for this part write a few sentences about what the graph in #8 shows -- why does the graph look the way it does)
+
+# Fitting a linear regression of all predictors against Life insurance density variable to determine the significant factors.
+
+#Life_Ins$EGROWTH<-as.numeric(Life_Ins$EGROWTH)
+good<-complete.cases(Life_Ins)
+Life_Ins1<-Life_Ins[good,]
+Life_Ins1<-select(Life_Ins1, -1:-2, -10)
+```
+
+```{r}
+
+lmLife<-lm(INSDENS~ . , data = Life_Ins1, na.action = na.omit)
+summary(lmLife)
+```
+
+```{r}
+# The graph in 8 shows the relationship between the life insurance density variables and the years. Here, years are plotted on the x-asis against the life insurance density on the y-axis. The dark read line is the line of best fit which shows that most of the points are scatted far way from the line of best fit and this shows how heterogeneous the variables of life insurance in Africa are. These explains the reason why the graph looks like that.
+```
+
+```{r}
+
+#.10. Follow up (for this part, write a few sentences about the data -- could you use it to answer your research questions? If not, where might you find data that could be used to answer your research questions? 
+ 
+# The data looks good though there are few NA's and graph in 8 shows that there are lots of outliers in the data points and the data points looks heterogenous. This data could be used to answer the research questions.
+
+#From the above regression output, seven variables significantly affect life insurance density. These include the Ease of doing business, GNI per capita, Real Interest Rate, Insurance Penetration, Corruption Perception Index, Openness of Economy, and Governement Spending.
+```
+
+```{r}
+
+```
+
