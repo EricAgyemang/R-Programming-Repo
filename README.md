@@ -20,7 +20,7 @@ CRAN. CRAN also hosts many add-on packages that can be used to extend the functi
 The R system is divided into 2 conceptual parts:
 1. The “base” R system that you download from CRAN: Linux Windows Mac Source Code.
 2. Everything else.
-3. 
+
 R functionality is divided into a number of packages.
 When you download a fresh installation of R from CRAN, you get all of the above, which represents
 a substantial amount of functionality. However, there are many other packages available:
