@@ -1,4 +1,4 @@
-*.r linguist-detectable=true
+*.md linguist-detectable=true
 *.csharp linguist-detectable=false  
 *.java linguist-detectable=false  
 *.js linguist-detectable=false  
